@@ -54,8 +54,8 @@ code = "shader_type spatial;
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bqi8h"]
 render_priority = 0
 shader = SubResource("Shader_wvvyk")
-shader_parameter/strength = 0.06
-shader_parameter/thickness = 0.05
+shader_parameter/strength = 0.08
+shader_parameter/thickness = 0.1
 
 [sub_resource type="QuadMesh" id="QuadMesh_cnoct"]
 material = SubResource("ShaderMaterial_bqi8h")
@@ -65,7 +65,9 @@ script = ExtResource("1_fafld")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=452331914]
 emitting = false
-amount = 2
+amount = 1
+amount_ratio = 0.8992
+lifetime = 0.8
 one_shot = true
 fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_32lff")
