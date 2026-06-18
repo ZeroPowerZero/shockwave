@@ -2,5 +2,71 @@
 
 [ext_resource type="Script" uid="uid://qo5kvtg30a3m" path="res://scripts/shockwave.gd" id="1_fafld"]
 
+[sub_resource type="Gradient" id="Gradient_fafld"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_238uk"]
+gradient = SubResource("Gradient_fafld")
+
+[sub_resource type="Curve" id="Curve_uo8p8"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_at7mu"]
+curve = SubResource("Curve_uo8p8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_32lff"]
+gravity = Vector3(0, 0, 0)
+scale_min = 40.0
+scale_max = 40.0
+scale_curve = SubResource("CurveTexture_at7mu")
+color_ramp = SubResource("GradientTexture1D_238uk")
+
+[sub_resource type="Shader" id="Shader_wvvyk"]
+code = "shader_type spatial;
+	render_mode unshaded, cull_disabled, depth_draw_never, shadows_disabled;
+	
+	uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+	uniform float strength = 0.08;
+	uniform float thickness = 0.15;
+	
+	void vertex() {
+		mat4 modified_model_view = VIEW_MATRIX * mat4(
+			INV_VIEW_MATRIX[0] * length(MODEL_MATRIX[0].xyz),
+			INV_VIEW_MATRIX[1] * length(MODEL_MATRIX[1].xyz),
+			INV_VIEW_MATRIX[2] * length(MODEL_MATRIX[2].xyz),
+			MODEL_MATRIX[3]
+		);
+		MODELVIEW_MATRIX = modified_model_view;
+		MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
+	}
+	
+	void fragment() {
+		vec2 uv = UV - vec2(0.5);
+		float dist = length(uv);
+		float circle = smoothstep(0.5, 0.49, dist);
+		float ring = smoothstep(0.5, 0.5 - thickness, dist) * smoothstep(0.5 - thickness * 2.0, 0.5 - thickness, dist);
+		vec2 offset = normalize(uv) * ring * strength * COLOR.a;
+		ALBEDO = texture(screen_texture, SCREEN_UV - offset).rgb;
+		ALPHA = circle;
+	}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bqi8h"]
+render_priority = 0
+shader = SubResource("Shader_wvvyk")
+shader_parameter/strength = 0.06
+shader_parameter/thickness = 0.05
+
+[sub_resource type="QuadMesh" id="QuadMesh_cnoct"]
+material = SubResource("ShaderMaterial_bqi8h")
+
 [node name="shockwave" type="Node3D" unique_id=786203562]
 script = ExtResource("1_fafld")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=452331914]
+emitting = false
+amount = 3
+one_shot = true
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_32lff")
+draw_pass_1 = SubResource("QuadMesh_cnoct")
