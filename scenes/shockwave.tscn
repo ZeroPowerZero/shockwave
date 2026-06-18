@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://vy5hpcthh077"]
+
+[ext_resource type="Script" uid="uid://qo5kvtg30a3m" path="res://scripts/shockwave.gd" id="1_fafld"]
+
+[node name="shockwave" type="Node3D" unique_id=786203562]
+script = ExtResource("1_fafld")

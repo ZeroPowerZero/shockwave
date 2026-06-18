@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://28ecyv7hhrxy"]
+
+[ext_resource type="Script" uid="uid://di8wbm55t4em3" path="res://scripts/player.gd" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://dq6gyltufmn0t" path="res://scripts/crosshair.gd" id="2_qhqgy"]
+[ext_resource type="Script" uid="uid://cp2axa7jhlqut" path="res://scripts/hit_marker.gd" id="3_dqkch"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g2els"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qhqgy"]
+albedo_color = Color(0.15, 0.15, 0.18, 1)
+metallic = 0.9
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.1, 0.4, 1, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_dqkch"]
+size = Vector3(0.08, 0.1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qlg0r"]
+blend_mode = 1
+shading_mode = 0
+
+[sub_resource type="SphereMesh" id="SphereMesh_tuyoq"]
+radius = 0.07
+height = 0.14
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fjrip"]
+albedo_color = Color(0.1, 0.1, 0.12, 1)
+metallic = 1.0
+roughness = 0.1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_smehm"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.35
+
+[node name="player" type="CharacterBody3D" unique_id=452721438]
+script = ExtResource("1_3vyb7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1966891361]
+shape = SubResource("CapsuleShape3D_g2els")
+
+[node name="Head" type="Node3D" parent="." unique_id=164812562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1059960999]
+current = true
+fov = 90.0
+
+[node name="RayCast3D" type="RayCast3D" parent="Head/Camera3D" unique_id=48079922]
+target_position = Vector3(0, 0, -200)
+collision_mask = 4294967295
+
+[node name="GunArm" type="Node3D" parent="Head/Camera3D" unique_id=123212493]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.35, -0.5)
+
+[node name="Gun" type="Node3D" parent="Head/Camera3D/GunArm" unique_id=1709293064]
+
+[node name="GunMesh" type="MeshInstance3D" parent="Head/Camera3D/GunArm/Gun" unique_id=1042366278]
+material_override = SubResource("StandardMaterial3D_qhqgy")
+mesh = SubResource("BoxMesh_dqkch")
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="Head/Camera3D/GunArm/Gun" unique_id=290305458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -0.58)
+visible = false
+material_override = SubResource("StandardMaterial3D_qlg0r")
+mesh = SubResource("SphereMesh_tuyoq")
+
+[node name="MuzzleLight" type="OmniLight3D" parent="Head/Camera3D/GunArm/Gun" unique_id=903509236]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -0.58)
+visible = false
+light_color = Color(0.5, 0.85, 1, 1)
+light_energy = 3.0
+omni_range = 4.0
+
+[node name="Barrel" type="MeshInstance3D" parent="Head/Camera3D/GunArm/Gun" unique_id=603996989]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.02, -0.4)
+material_override = SubResource("StandardMaterial3D_fjrip")
+mesh = SubResource("CylinderMesh_smehm")
+
+[node name="ShootTimer" type="Timer" parent="." unique_id=1705887618]
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=507636766]
+
+[node name="Crosshair" type="Control" parent="HUD" unique_id=154103308]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("2_qhqgy")
+
+[node name="HitMarker" type="Control" parent="HUD" unique_id=753065874]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("3_dqkch")
+
+[node name="AmmoLabel" type="Label" parent="HUD" unique_id=276110865]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1272.0
+offset_top = -708.0
+offset_right = -1172.0
+offset_bottom = -668.0
+theme_override_colors/font_color = Color(0.4, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "∞"
+horizontal_alignment = 2
