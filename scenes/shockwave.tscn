@@ -8,18 +8,18 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_238uk"]
 gradient = SubResource("Gradient_fafld")
 
-[sub_resource type="Curve" id="Curve_uo8p8"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_fafld"]
+_data = [Vector2(0, 0), 0.0, 3.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_at7mu"]
-curve = SubResource("Curve_uo8p8")
+[sub_resource type="CurveTexture" id="CurveTexture_238uk"]
+curve = SubResource("Curve_fafld")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_32lff"]
 gravity = Vector3(0, 0, 0)
-scale_min = 40.0
-scale_max = 40.0
-scale_curve = SubResource("CurveTexture_at7mu")
+scale_min = 35.0
+scale_max = 35.0
+scale_curve = SubResource("CurveTexture_238uk")
 color_ramp = SubResource("GradientTexture1D_238uk")
 
 [sub_resource type="Shader" id="Shader_wvvyk"]
@@ -65,7 +65,7 @@ script = ExtResource("1_fafld")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=452331914]
 emitting = false
-amount = 3
+amount = 2
 one_shot = true
 fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_32lff")
